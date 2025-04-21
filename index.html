@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>🎉 Happy Birthday Baisakhi! 🎉</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-image: radial-gradient( circle farthest-corner at 12.9% 20.3%,  rgba(255,162,104,1) 0%, rgba(254,80,147,1) 41% );
+        font-family: "Comic Sans MS", cursive, sans-serif;
+        text-align: center;
+        overflow: hidden;
+        height: 100vh;
+        position: relative;
+      }
+
+      h1 {
+        font-size: 2.2rem;
+        color: #fff;
+        padding: 1rem;
+        animation: pop 1s ease-in-out forwards;
+      }
+
+      .message {
+        font-size: 1.8rem;
+        color: #fff;
+        margin: 1rem 20px;
+        animation: fadein 2s ease-in forwards;
+      }
+
+      button {
+        margin-top: 1.5rem;
+        padding: 12px 24px;
+        font-size: 1.2rem;
+        background-color: #fff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+
+      button:hover {
+        transform: scale(1.1);
+      }
+
+      .cake-container {
+        margin-top: 20px;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .cake-container img {
+        width: 200px;
+        max-width: 80vw;
+        display: none;
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+      }
+
+      .cake-container img.active {
+        display: block;
+        animation: fadein 1.5s ease-in-out forwards;
+      }
+
+      .extra-wishes {
+        font-size: 1.8rem;
+        color: #fff;
+        margin-top: 1.5rem;
+        padding: 0 20px;
+        display: none;
+        animation: fadein 3s ease-in-out forwards;
+      }
+
+      @keyframes pop {
+        0% {
+          transform: scale(0);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadein {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 10;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🎉 Hey Baisakhi! 🎉</h1>
+    <div class="message">
+      Wishing you smiles, love, and magic today and always. You’re truly
+      special! ❤️🎂
+    </div>
+    <button onclick="startSurprise()">🎁 Tap for Surprise!</button>
+
+    <div class="cake-container" id="cake-container">
+      <img class="slide" src="./img/IMG-20240512-WA0006.jpg" alt="Slide 7" />
+      <img class="slide" src="./img/IMG_20250418_212944.jpg" alt="Slide 1" />
+      <img class="slide" src="./img/IMG_20250418_214252.jpg" alt="Slide 2" />
+      <img class="slide" src="./img/IMG_20250418_214400.jpg" alt="Slide 3" />
+      <img class="slide" src="./img/IMG_20250418_213047.jpg" alt="Slide 4" />
+      <img class="slide" src="./img/IMG_20250418_213115.jpg" alt="Slide 5" />
+      <img class="slide" src="./img/IMG_20250418_213013.jpg" alt="Slide 6" />
+      <img class="slide" src="./img//IMG-20240512-WA0004.jpg" alt="Slide 8" />
+      <!-- Add more images as needed -->
+    </div>
+
+    <div class="extra-wishes" id="extra-wishes">
+      Hope this year brings you lots of joy, crazy adventures, and unforgettable
+      memories! 🎈🎁💖
+    </div>
+
+    <canvas id="confetti"></canvas>
+
+    <audio id="birthday-audio">
+      <source src="./audio/happy-birthday-254480.mp3" type="audio/mpeg" />
+      Your browser does not support the audio element.
+    </audio>
+
+    <script>
+      const canvas = document.getElementById("confetti");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const confetti = [];
+      for (let i = 0; i < 200; i++) {
+        confetti.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * -canvas.height,
+          size: Math.random() * 5 + 2,
+          speed: Math.random() * 2 + 1,
+          color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+        });
+      }
+
+      function drawConfetti() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        confetti.forEach((p) => {
+          p.y += p.speed;
+          if (p.y > canvas.height) {
+            p.y = 0;
+            p.x = Math.random() * canvas.width;
+          }
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        requestAnimationFrame(drawConfetti);
+      }
+
+      function startSurprise() {
+        document.getElementById("cake-container").style.display = "flex";
+        document.getElementById("extra-wishes").style.display = "block";
+
+        const audio = document.getElementById("birthday-audio");
+        audio.play();
+
+        drawConfetti();
+
+        const slides = document.querySelectorAll(".cake-container .slide");
+        let current = 0;
+
+        function showSlide(index) {
+          slides.forEach((img, i) => {
+            img.classList.remove("active");
+            if (i === index) img.classList.add("active");
+          });
+        }
+
+        showSlide(current);
+        setInterval(() => {
+          current = (current + 1) % slides.length;
+          showSlide(current);
+        }, 3000); // 3 seconds
+      }
+
+      window.addEventListener("resize", () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      });
+    </script>
+  </body>
+</html>
